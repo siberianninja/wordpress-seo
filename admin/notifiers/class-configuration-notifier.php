@@ -45,10 +45,12 @@ class WPSEO_Configuration_Notifier implements WPSEO_Listener {
 	 */
 	public function notify() {
 		if ( ! $this->show_notification() ) {
-			return $this->re_run_notification();
+			$this->re_run_notification();
 		}
-
-		return $this->first_time_notification();
+		else
+		{
+			return $this->first_time_notification();
+		}
 	}
 
 	/**
@@ -106,15 +108,11 @@ class WPSEO_Configuration_Notifier implements WPSEO_Listener {
 	 * @return string The notification.
 	 */
 	private function re_run_notification() {
-		$content = sprintf(
-			/* translators: %1$s expands to Yoast SEO, %2$s is a link start tag to the Onboarding Wizard, %3$s is the link closing tag. */
-			esc_html__( 'If you want to double-check your %1$s settings, or change something, you can always %2$sreopen the configuration wizard%3$s.', 'wordpress-seo' ),
-			'Yoast SEO',
-			'<a href="' . esc_url( admin_url( 'admin.php?page=' . WPSEO_Configuration_Page::PAGE_IDENTIFIER ) ) . '">',
-			'</a>'
-		);
+		$note = new Wizard_Notification();
+		$notification = $note->get_notification(2);
 
-		return $this->notification( __( 'SEO settings configured', 'wordpress-seo' ), $content );
+		$notification_center = Yoast_Notification_Center::get();
+		$notification_center->add_notification( $notification );
 	}
 
 	/**
@@ -123,15 +121,11 @@ class WPSEO_Configuration_Notifier implements WPSEO_Listener {
 	 * @return string The notification.
 	 */
 	private function first_time_notification() {
-		$content = sprintf(
-			/* translators: %1$s expands to Yoast SEO, %2$s is a link start tag to the Onboarding Wizard, %3$s is the link closing tag. */
-			esc_html__( 'Get started quickly with the %1$s %2$sconfiguration wizard%3$s!', 'wordpress-seo' ),
-			'Yoast SEO',
-			'<a href="' . esc_url( admin_url( 'admin.php?page=' . WPSEO_Configuration_Page::PAGE_IDENTIFIER ) ) . '">',
-			'</a>'
-		);
+		$note = new Wizard_Notification();
+		$notification = $note->get_notification(0);
 
-		return $this->notification( __( 'First-time SEO configuration', 'wordpress-seo' ), $content, true );
+		$notification_center = Yoast_Notification_Center::get();
+		$notification_center->add_notification( $notification );
 	}
 
 	/**
