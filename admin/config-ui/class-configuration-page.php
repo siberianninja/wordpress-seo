@@ -214,7 +214,7 @@ class WPSEO_Configuration_Page {
 	 */
 	private static function get_notification() {
 		$note = new Wizard_Notification();
-		$notification = $note->get_notification(1);
+		$notification = $note->get_notification( 1 );
 
 		return $notification;
 	}

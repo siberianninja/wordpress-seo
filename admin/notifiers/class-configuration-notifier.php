@@ -47,8 +47,7 @@ class WPSEO_Configuration_Notifier implements WPSEO_Listener {
 		if ( ! $this->show_notification() ) {
 			$this->re_run_notification();
 		}
-		else
-		{
+		else {
 			return $this->first_time_notification();
 		}
 	}
@@ -109,7 +108,7 @@ class WPSEO_Configuration_Notifier implements WPSEO_Listener {
 	 */
 	private function re_run_notification() {
 		$note = new Wizard_Notification();
-		$notification = $note->get_notification(2);
+		$notification = $note->get_notification( 2 );
 
 		$notification_center = Yoast_Notification_Center::get();
 		$notification_center->add_notification( $notification );
@@ -122,7 +121,7 @@ class WPSEO_Configuration_Notifier implements WPSEO_Listener {
 	 */
 	private function first_time_notification() {
 		$note = new Wizard_Notification();
-		$notification = $note->get_notification(0);
+		$notification = $note->get_notification( 0 );
 
 		$notification_center = Yoast_Notification_Center::get();
 		$notification_center->add_notification( $notification );

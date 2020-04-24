@@ -1,8 +1,8 @@
 <?php
 
 
-class Wizard_Notification
-{
+class Wizard_Notification {
+
 
 	/**
 	 * Admin page identifier.
@@ -17,9 +17,9 @@ class Wizard_Notification
 	 *
 	 * @return Yoast_Notification
 	 */
-	public function get_notification($state) {
+	public function get_notification( $state ) {
 
-		$message = $this->set_notification($state);
+		$message = $this->set_notification( $state );
 
 		$notification = new Yoast_Notification(
 			$message,
@@ -34,10 +34,9 @@ class Wizard_Notification
 		return $notification;
 	}
 
-	private function set_notification($state)
-	{
+	private function set_notification( $state ) {
 
-		switch ($state) {
+		switch ( $state ) {
 			case 0:
 				$message  = __( 'Get started quickly with the configuration wizard!', 'wordpress-seo' );
 				$message .= '<br/>';
