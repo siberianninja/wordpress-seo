@@ -127,43 +127,4 @@ class WPSEO_Configuration_Notifier implements WPSEO_Listener {
 		$notification_center->add_notification( $notification );
 	}
 
-	/**
-	 * Returns a styled notification.
-	 *
-	 * @param string $title          Title for the notification.
-	 * @param string $content        Content for the notification.
-	 * @param bool   $show_dismissal Whether to show the dismiss button or not.
-	 *
-	 * @return string The styled notification.
-	 */
-	private function notification( $title, $content, $show_dismissal = false ) {
-		$notification  = '<div class="yoast-container yoast-container__configuration-wizard">';
-		$notification .= sprintf(
-			'<img src="%1$s" height="%2$s" width="%3$d" alt="" />',
-			esc_url( plugin_dir_url( WPSEO_FILE ) . 'images/new-to-configuration-notice.svg' ),
-			60,
-			60
-		);
-		$notification .= '<div class="yoast-container__configuration-wizard--content">';
-		$notification .= sprintf(
-			'<h3>%s<span class="dashicons dashicons-yes"></span></h3>',
-			esc_html( $title )
-		);
-
-		$notification .= '<p>';
-		$notification .= $content;
-		$notification .= '</p>';
-
-		$notification .= '</div>';
-		if ( $show_dismissal ) {
-			$notification .= sprintf(
-				'<a href="%1$s" style="" class="button dismiss yoast-container__configuration-wizard--dismiss"><span class="screen-reader-text">%2$s</span><span class="dashicons dashicons-no-alt"></span></a>',
-				esc_url( admin_url( 'admin.php?page=wpseo_dashboard&amp;dismiss_get_started=1' ) ),
-				esc_html__( 'Dismiss this item.', 'wordpress-seo' )
-			);
-		}
-		$notification .= '</div>';
-
-		return $notification;
-	}
 }
