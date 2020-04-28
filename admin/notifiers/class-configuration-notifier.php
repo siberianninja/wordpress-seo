@@ -45,11 +45,12 @@ class WPSEO_Configuration_Notifier implements WPSEO_Listener {
 	 */
 	public function notify() {
 		if ( ! $this->show_notification() ) {
-			$this->re_run_notification();
+			return $this->re_run_notification();
 		}
-		else {
-			return $this->first_time_notification();
+		if (	WPSEO_Options::get( 'started_configuration_wizard' ) ) {
+			return $this->continue_notification();
 		}
+		return $this->first_time_notification();
 	}
 
 	/**
@@ -104,27 +105,70 @@ class WPSEO_Configuration_Notifier implements WPSEO_Listener {
 	/**
 	 * Returns the notification to re-run the config wizard.
 	 *
-	 * @return string The notification.
+	 * @return Yoast_Notification
 	 */
 	private function re_run_notification() {
 		$note = new Wizard_Notification();
-		$notification = $note->get_notification( 2 );
+		$message = $note->get_notification_message( 'finish' );
+		$notification = new Yoast_Notification(
+			$message,
+			[
+				'type'         => Yoast_Notification::WARNING,
+				'id'           => 'wpseo-dismiss-onboarding-notice',
+				'capabilities' => 'wpseo_manage_options',
+				'priority'     => 0.8,
+			]
+		);
 
 		$notification_center = Yoast_Notification_Center::get();
 		$notification_center->add_notification( $notification );
+		return $message;
 	}
 
 	/**
 	 * Returns the notification to start the config wizard for the first time.
 	 *
-	 * @return string The notification.
+	 * @return Yoast_Notification
 	 */
 	private function first_time_notification() {
 		$note = new Wizard_Notification();
-		$notification = $note->get_notification( 0 );
+		$message = $note->get_notification_message( 'start' );
+		$notification = new Yoast_Notification(
+			$message,
+			[
+				'type'         => Yoast_Notification::WARNING,
+				'id'           => 'wpseo-dismiss-onboarding-notice',
+				'capabilities' => 'wpseo_manage_options',
+				'priority'     => 0.8,
+			]
+		);
 
 		$notification_center = Yoast_Notification_Center::get();
 		$notification_center->add_notification( $notification );
+		return $message;
+	}
+
+	/**
+	 * Returns the notification to continue the config wizard.
+	 *
+	 * @return Yoast_Notification
+	 */
+	private function continue_notification() {
+		$note = new Wizard_Notification();
+		$message = $note->get_notification_message( 'continue' );
+		$notification = new Yoast_Notification(
+			$message,
+			[
+				'type'         => Yoast_Notification::WARNING,
+				'id'           => 'wpseo-dismiss-onboarding-notice',
+				'capabilities' => 'wpseo_manage_options',
+				'priority'     => 0.8,
+			]
+		);
+
+		$notification_center = Yoast_Notification_Center::get();
+		$notification_center->add_notification( $notification );
+		return $message;
 	}
 
 }

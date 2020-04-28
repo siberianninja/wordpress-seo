@@ -11,15 +11,38 @@
 class WPSEO_Configuration_Notifier_Test extends WPSEO_UnitTestCase {
 
 	/**
-	 * Tests the notify method when the Onboarding Wizard notice won't be shown.
+	 * Tests whether the wizard notification returns the correct value when the wizard has not been started yet.
 	 *
 	 * @covers WPSEO_Configuration_Notifier::notify
 	 */
-	public function test_notify_when_onboarding_wizard_notice_wont_be_shown() {
+	public function test_notify_when_not_started_wizard() {
+		WPSEO_Options::set( 'show_onboarding_notice', true );
+		WPSEO_Options::set( 'started_configuration_wizard', false);
+		$notifier = new WPSEO_Configuration_Notifier();
+		$this->assertEquals( 'Get started quickly with the configuration wizard!<br/>We have detected that you have not started this wizard yet, so we recommend you to <a href="' . get_site_url() . '/wp-admin/?page=wpseo_configurator">start the configuration wizard to configure Yoast SEO</a>.', $notifier->notify() );
+	}
+
+	/**
+	 * Tests whether the wizard notification returns the correct value when the wizard has not been started yet.
+	 *
+	 * @covers WPSEO_Configuration_Notifier::notify
+	 */
+	public function test_notify_when_started_wizard() {
+		WPSEO_Options::set( 'show_onboarding_notice', true );
+		WPSEO_Options::set( 'started_configuration_wizard', true);
+		$notifier = new WPSEO_Configuration_Notifier();
+		$this->assertEquals( 'The configuration wizard helps you to easily configure your site to have the optimal SEO settings.<br/>We have detected that you have not finished this wizard yet, so we recommend you to <a href="' . get_site_url() . '/wp-admin/?page=wpseo_configurator">start the configuration wizard to configure Yoast SEO</a>.', $notifier->notify() );
+	}
+
+	/**
+	 * Tests whether the wizard notification returns the correct value when the wizard has been completed.
+	 *
+	 * @covers WPSEO_Configuration_Notifier::notify
+	 */
+	public function test_notify_when_completed_wizard() {
 		WPSEO_Options::set( 'show_onboarding_notice', false );
 		$notifier = new WPSEO_Configuration_Notifier();
-
-		$this->assertEquals( '<div class="yoast-container yoast-container__configuration-wizard"><img src="http://example.org/wp-content/plugins/wordpress-seo/images/new-to-configuration-notice.svg" height="60" width="60" alt="" /><div class="yoast-container__configuration-wizard--content"><h3>SEO settings configured<span class="dashicons dashicons-yes"></span></h3><p>If you want to double-check your Yoast SEO settings, or change something, you can always <a href="http://example.org/wp-admin/admin.php?page=wpseo_configurator">reopen the configuration wizard</a>.</p></div></div>', $notifier->notify() );
+		$this->assertEquals( 'You have successfully completed the notification wizard, good job!<br/>If you want to double-check your Yoast SEO settings, or change something, you can always <a href="' . get_site_url() . '/wp-admin/admin.php?page=wpseo_configurator">reopen the configuration wizard</a>.', $notifier->notify() );
 	}
 
 	/**
